@@ -164,7 +164,7 @@ class _GoogleWalletButtonState extends State<GoogleWalletButton> {
         child: SvgPicture.asset(
           _assetPath(),
           height: max(widget.height, GoogleWalletButton._minHeight),
-          fit: BoxFit.cover,
+          fit: BoxFit.contain,
           package: 'flutter_google_wallet',
         ),
       ),
