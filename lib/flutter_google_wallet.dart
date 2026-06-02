@@ -33,7 +33,7 @@ extension GoogleWalletButtonStyleExtension on GoogleWalletButtonStyle {
   }
 }
 
-class GoogleWalletButton extends StatelessWidget {
+class GoogleWalletButton extends StatefulWidget {
   static const double _minHeight = 48;
   static const _defaultLocaleName = 'en_US';
   static const _supportedLocaleNames = [
@@ -109,38 +109,64 @@ class GoogleWalletButton extends StatelessWidget {
 
   final GoogleWalletButtonStyle style;
   final double height;
-  final VoidCallback? onPressed;
+  final VoidCallback onPressed;
   final Locale? locale;
 
   const GoogleWalletButton({
     super.key,
     this.style = GoogleWalletButtonStyle.button,
     this.height = _minHeight,
-    this.onPressed,
+    required this.onPressed,
     this.locale,
   });
 
+  @override
+  State<GoogleWalletButton> createState() => _GoogleWalletButtonState();
+}
+
+class _GoogleWalletButtonState extends State<GoogleWalletButton> {
+  static const double _pressedScale = 0.96;
+  bool _isPressed = false;
+
   // ignore: strict_top_level_inference
-  String _assetPath(context) {
-    String localeName = _defaultLocaleName;
-    if (locale != null && _supportedLocaleNames.contains(locale.toString())) {
-      localeName = locale.toString();
-    } else if (_supportedLocaleNames.contains(Platform.localeName)) {
+  String _assetPath() {
+    String localeName = GoogleWalletButton._defaultLocaleName;
+    if (widget.locale != null &&
+        GoogleWalletButton._supportedLocaleNames.contains(
+          widget.locale.toString(),
+        )) {
+      localeName = widget.locale.toString();
+    } else if (GoogleWalletButton._supportedLocaleNames.contains(
+      Platform.localeName,
+    )) {
       localeName = Platform.localeName;
     }
-    return 'assets/${localeName.replaceAll('_', '')}_add_to_google_wallet_${style.value}.svg';
+    return 'assets/${localeName.replaceAll('_', '')}_add_to_google_wallet_${widget.style.value}.svg';
   }
 
   @override
   Widget build(BuildContext context) {
-    return RawMaterialButton(
-      padding: EdgeInsets.all(8),
-      onPressed: onPressed,
-      child: SvgPicture.asset(
-        _assetPath(context),
-        height: max(height, _minHeight),
-        fit: BoxFit.contain,
-        package: 'flutter_google_wallet',
+    return GestureDetector(
+      onTapDown: (_) => setState(() {
+        _isPressed = true;
+      }),
+      onTapUp: (_) => setState(() {
+        _isPressed = false;
+      }),
+      onTapCancel: () => setState(() {
+        _isPressed = false;
+      }),
+      onTap: widget.onPressed,
+      child: AnimatedScale(
+        duration: const Duration(milliseconds: 100),
+        curve: Curves.easeOut,
+        scale: _isPressed ? _pressedScale : 1,
+        child: SvgPicture.asset(
+          _assetPath(),
+          height: max(widget.height, GoogleWalletButton._minHeight),
+          fit: BoxFit.cover,
+          package: 'flutter_google_wallet',
+        ),
       ),
     );
   }

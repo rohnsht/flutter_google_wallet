@@ -4,17 +4,17 @@ import 'package:flutter_google_wallet/flutter_google_wallet.dart';
 
 void main() {
   group('GoogleWalletButton Widget', () {
-    testWidgets('renders with default style (button)', (WidgetTester tester) async {
+    testWidgets('renders with default style (button)', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(
         MaterialApp(
-          home: Scaffold(
-            body: GoogleWalletButton(),
-          ),
+          home: Scaffold(body: GoogleWalletButton(onPressed: () {})),
         ),
       );
 
       expect(find.byType(GoogleWalletButton), findsOneWidget);
-      expect(find.byType(RawMaterialButton), findsOneWidget);
+      expect(find.byType(GestureDetector), findsOneWidget);
     });
 
     testWidgets('renders with badge style', (WidgetTester tester) async {
@@ -23,13 +23,14 @@ void main() {
           home: Scaffold(
             body: GoogleWalletButton(
               style: GoogleWalletButtonStyle.badge,
+              onPressed: () {},
             ),
           ),
         ),
       );
 
       expect(find.byType(GoogleWalletButton), findsOneWidget);
-      expect(find.byType(RawMaterialButton), findsOneWidget);
+      expect(find.byType(GestureDetector), findsOneWidget);
     });
 
     testWidgets('renders with custom height', (WidgetTester tester) async {
@@ -38,9 +39,7 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
-            body: GoogleWalletButton(
-              height: customHeight,
-            ),
+            body: GoogleWalletButton(height: customHeight, onPressed: () {}),
           ),
         ),
       );
@@ -48,14 +47,14 @@ void main() {
       expect(find.byType(GoogleWalletButton), findsOneWidget);
     });
 
-    testWidgets('respects minimum height constraint', (WidgetTester tester) async {
+    testWidgets('respects minimum height constraint', (
+      WidgetTester tester,
+    ) async {
       // Attempt to set height below minimum (48)
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
-            body: GoogleWalletButton(
-              height: 32.0,
-            ),
+            body: GoogleWalletButton(height: 32.0, onPressed: () {}),
           ),
         ),
       );
@@ -63,7 +62,9 @@ void main() {
       expect(find.byType(GoogleWalletButton), findsOneWidget);
     });
 
-    testWidgets('calls onPressed callback when tapped', (WidgetTester tester) async {
+    testWidgets('calls onPressed callback when tapped', (
+      WidgetTester tester,
+    ) async {
       bool wasPressed = false;
 
       await tester.pumpWidget(
@@ -78,13 +79,15 @@ void main() {
         ),
       );
 
-      await tester.tap(find.byType(RawMaterialButton));
+      await tester.tap(find.byType(GestureDetector));
       await tester.pumpAndSettle();
 
       expect(wasPressed, true);
     });
 
-    testWidgets('supports multiple button instances', (WidgetTester tester) async {
+    testWidgets('supports multiple button instances', (
+      WidgetTester tester,
+    ) async {
       int pressCount = 0;
 
       await tester.pumpWidget(
@@ -110,7 +113,7 @@ void main() {
       );
 
       expect(find.byType(GoogleWalletButton), findsWidgets);
-      expect(find.byType(RawMaterialButton), findsNWidgets(2));
+      expect(find.byType(GestureDetector), findsNWidgets(2));
     });
 
     testWidgets('renders with custom locale', (WidgetTester tester) async {
@@ -119,6 +122,7 @@ void main() {
           home: Scaffold(
             body: GoogleWalletButton(
               locale: const Locale('de'),
+              onPressed: () {},
             ),
           ),
         ),
@@ -127,12 +131,15 @@ void main() {
       expect(find.byType(GoogleWalletButton), findsOneWidget);
     });
 
-    testWidgets('renders with supported locale en_GB', (WidgetTester tester) async {
+    testWidgets('renders with supported locale en_GB', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
             body: GoogleWalletButton(
               locale: const Locale('en', 'GB'),
+              onPressed: () {},
             ),
           ),
         ),
@@ -141,12 +148,15 @@ void main() {
       expect(find.byType(GoogleWalletButton), findsOneWidget);
     });
 
-    testWidgets('renders with supported locale zh_HK', (WidgetTester tester) async {
+    testWidgets('renders with supported locale zh_HK', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
             body: GoogleWalletButton(
               locale: const Locale('zh', 'HK'),
+              onPressed: () {},
             ),
           ),
         ),
@@ -155,23 +165,9 @@ void main() {
       expect(find.byType(GoogleWalletButton), findsOneWidget);
     });
 
-    testWidgets('button without onPressed is still tappable', (WidgetTester tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: GoogleWalletButton(),
-          ),
-        ),
-      );
-
-      // Should not throw error even though onPressed is null
-      await tester.tap(find.byType(RawMaterialButton));
-      await tester.pumpAndSettle();
-
-      expect(find.byType(GoogleWalletButton), findsOneWidget);
-    });
-
-    testWidgets('button with all parameters specified', (WidgetTester tester) async {
+    testWidgets('button with all parameters specified', (
+      WidgetTester tester,
+    ) async {
       bool wasPressed = false;
 
       await tester.pumpWidget(
@@ -192,13 +188,15 @@ void main() {
 
       expect(find.byKey(const Key('google_wallet_button')), findsOneWidget);
 
-      await tester.tap(find.byType(RawMaterialButton));
+      await tester.tap(find.byType(GestureDetector));
       await tester.pumpAndSettle();
 
       expect(wasPressed, true);
     });
 
-    testWidgets('multiple different button styles work together', (WidgetTester tester) async {
+    testWidgets('multiple different button styles work together', (
+      WidgetTester tester,
+    ) async {
       int buttonPresses = 0;
       int badgePresses = 0;
 
@@ -227,7 +225,7 @@ void main() {
         ),
       );
 
-      final buttons = find.byType(RawMaterialButton);
+      final buttons = find.byType(GestureDetector);
       expect(buttons, findsNWidgets(2));
 
       await tester.tap(buttons.first);
@@ -239,7 +237,9 @@ void main() {
       expect(badgePresses, 1);
     });
 
-    testWidgets('button handles state updates correctly', (WidgetTester tester) async {
+    testWidgets('button handles state updates correctly', (
+      WidgetTester tester,
+    ) async {
       int pressCount = 0;
 
       await tester.pumpWidget(
@@ -262,11 +262,11 @@ void main() {
         ),
       );
 
-      await tester.tap(find.byType(RawMaterialButton));
+      await tester.tap(find.byType(GestureDetector));
       await tester.pumpAndSettle();
       expect(pressCount, 1);
 
-      await tester.tap(find.byType(RawMaterialButton));
+      await tester.tap(find.byType(GestureDetector));
       await tester.pumpAndSettle();
       expect(pressCount, 2);
     });
@@ -274,13 +274,11 @@ void main() {
     testWidgets('button respects padding', (WidgetTester tester) async {
       await tester.pumpWidget(
         MaterialApp(
-          home: Scaffold(
-            body: GoogleWalletButton(),
-          ),
+          home: Scaffold(body: GoogleWalletButton(onPressed: () {})),
         ),
       );
 
-      final button = find.byType(RawMaterialButton);
+      final button = find.byType(GestureDetector);
       expect(button, findsOneWidget);
 
       // Verify button is rendered with padding
