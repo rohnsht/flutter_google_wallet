@@ -1,7 +1,7 @@
 group = "np.com.rohanshrestha.flutter_google_wallet"
 version = "1.0-SNAPSHOT"
 
-buildscript {
+/*buildscript {
     val kotlinVersion = "2.3.20"
     repositories {
         google()
@@ -12,7 +12,7 @@ buildscript {
         classpath("com.android.tools.build:gradle:9.2.1")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
     }
-}
+}*/
 
 allprojects {
     repositories {
@@ -23,7 +23,6 @@ allprojects {
 
 plugins {
     id("com.android.library")
-    kotlin("android")
 }
 
 android {
